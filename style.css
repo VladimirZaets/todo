@@ -1,0 +1,116 @@
+#todo li {
+display: inline-block;
+}
+
+#todo li span {
+font-weight: bold;
+font-size: 18px;
+padding-right: 5px;
+vertical-align: middle;
+font-family: Arial;
+text-transform: uppercase;
+}
+#todo li input {
+border: 1px solid #000;
+border-radius: 5px;
+width: 300px;
+box-sizing: border-box;
+padding: 5px;
+}
+
+#list li:hover {
+background: #548bff;
+color: #fff;
+border: 2px solid #1559ec;
+box-shadow: 0 0 10px #548bff;
+}
+
+#list li:hover .menu-item-done {
+background: #fff;
+}
+
+#todo button {
+display: inline-block;
+width: 110px;
+height: 30px;
+background: blue;
+border-radius: 5px;
+border: 1px solid #000;
+color: #fff;
+margin: 0 10px;
+text-transform: uppercase;
+font-weight: bold;
+font-size: 16px;
+}
+
+#list {
+margin: 0;
+padding: 0;
+}
+
+.item-first {
+width: 95%;
+vertical-align: middle;
+    line-height: 10px;
+}
+
+.item-second {
+width: 5%;
+vertical-align: middle;
+    height: 20px;
+}
+
+.todo-list-item div {
+display: inline-block;
+}
+
+.menu-item-done {
+width: 20px;
+height: 20px;
+border-radius: 50%;
+background: #bdbdbd;
+display: inline-block;
+}
+
+#list li.todo-list-item.task-resolve,
+#list li.todo-list-item.task-inprogress.task-resolve {
+background: green;
+color: #fff;
+font-weight: bold;
+box-shadow: 0 0 10px green;
+}
+
+#list li.todo-list-item.task-inprogress {
+background: #1559ec;
+color: #fff;
+font-weight: bold;
+box-shadow: 0 0 10px blue;
+}
+
+#list li.todo-list-item.task-resolve .menu-item-done,
+#list li.todo-list-item.task-inprogress.task-resolve .menu-item-done{
+background: green;
+border: 1px solid #fff;
+box-sizing: border-box;
+}
+
+#list li.todo-list-item.task-inprogress .menu-item-done {
+background: #fff;
+}
+
+#list li.todo-list-item.task-resolve:hover {
+border: 2px solid green;
+}
+
+#list li {
+width: 90%;
+padding: 10px;
+font-size: 16px;
+cursor: pointer;
+border: 2px solid #bdbdbd;
+box-shadow: 0 0 10px rgba(0,0,0,0.5);
+border-radius: 10px;
+list-style: none;
+margin: 10px auto;
+box-sizing: border-box;
+}
