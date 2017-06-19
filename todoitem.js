@@ -1,6 +1,7 @@
 (function () {
 	var defaults = {
-		itemClass: 'todo-list-item'
+		itemClass: 'todo-list-item',
+		itemDoneClass: 'menu-item-done'
 	}
 
 	function extend(obj1, obj2) {
@@ -15,13 +16,15 @@
 		config = extend(config, defaults);
 
 		this.message = config.message;
+		this.id = config.id;
 		this.itemClass = config.itemClass;
+		this.itemDoneClass = config.itemDoneClass;
 	}
 
-	TodoListItem.prototype.render = function () {
+	TodoListItem.prototype.render = function (index) {
 		var result = '';
 
-		result += '<li class="'+ this.itemClass +'"><div class="item-first">'+ this.message +'</div></li>';
+		result += '<li data-message-id="'+ this.id +'" class="'+ this.itemClass +'"><div class="item-first">'+ index +': '+ this.message +'</div><div class="item-second"><span class="'+this.itemDoneClass+'"></span></div></li>';
 
 		return result;
 	}
