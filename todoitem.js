@@ -17,6 +17,8 @@
 
 		this.message = config.message;
 		this.id = config.id;
+		this.status = config.status;
+		this.inprogress = config.inprogress;
 		this.itemClass = config.itemClass;
 		this.itemDoneClass = config.itemDoneClass;
 	}
@@ -24,7 +26,17 @@
 	TodoListItem.prototype.render = function (index) {
 		var result = '';
 
-		result += '<li data-message-id="'+ this.id +'" class="'+ this.itemClass +'"><div class="item-first">'+ index +': '+ this.message +'</div><div class="item-second"><span class="'+this.itemDoneClass+'"></span></div></li>';
+		result += '<li data-message-id="'+ this.id +'" class="'+ this.itemClass;
+
+		if (this.status) {
+			result += ' task-resolve';
+		}
+
+		if (this.inprogress) {
+			result += ' task-inprogress';
+		}
+
+		result += '"><div class="item-first">'+ index +': '+ this.message +'</div><div class="item-second"><span class="'+this.itemDoneClass+'"></span></div></li>';
 
 		return result;
 	}

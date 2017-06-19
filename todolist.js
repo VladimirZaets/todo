@@ -46,12 +46,18 @@
 
 		event.preventDefault();
 		data = serialize(this.todoForm);
+
+		if (!Object.keys(data).length) {
+			return;
+		}
+
 		data.id = Date.now();
 
 		this.tasks.push(data);
 		this.renderItems();
 		this.cleanFields(this.todoForm);
 		this.setListeners();
+		console.log(this.tasks)
 	}
 
 	TodoList.prototype.setListeners = function () {
@@ -59,14 +65,36 @@
 			elem.getElementsByClassName(this.todiListItemDoneClass)[0].addEventListener('click', function(event){
 				var model = getItemData(elem, this.tasks);
 
+				event.stopPropagation();
+
 				if (!model.status) {
+					if (model.inprogress) {
+						model.inprogress = false;
+						elem.classList.remove('task-inprogress');
+					}
+
 					elem.classList.add('task-resolve');
 				} else {
 					elem.classList.remove('task-resolve');
 				}
 				
 				model.status = !model.status;
-			}.bind(this))
+			}.bind(this));
+
+			elem.addEventListener('click', function(event){
+				var model = getItemData(elem, this.tasks);
+
+				if (elem.classList.contains('task-resolve')) {
+					return;
+				}
+
+				removeProgress(this.tasks);
+
+				if (!model.inprogress) {
+					elem.classList.add('task-inprogress');
+					model.inprogress = true;
+				}
+			}.bind(this));
 		}.bind(this));
 	}
 
@@ -89,6 +117,15 @@
 				return list[i];
 			}
 		}
+	}
+
+	function removeProgress(list) {
+		list.forEach(function(task) {
+			if (task.inprogress) {
+				task.inprogress = false;
+				document.querySelector('[data-message-id="'+task.id+'"]').classList.remove('task-inprogress');
+			}
+		}.bind(this));
 	}
 
 	function serialize(form) {
