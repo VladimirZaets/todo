@@ -12,7 +12,26 @@
 		this.todoForm = config.todoForm;
 		this.todoListContainer = config.todoListContainer;
 		this.tasks = [];
+		this.dependency = config.dependency;
+		this.initDependency(config.dependency);
 		this.initialize();
+	}
+
+	TodoList.prototype.initDependency = function (deps) {
+		this.deps = {};
+		deps.constructor.forEach(function(name){
+			this.deps[name] = registry.getConstructor(name);
+		}.bind(this));
+	}
+
+	TodoList.prototype.renderItems = function () {
+		var result = '';
+
+		this.tasks.forEach(function(data){
+			result += new this.deps['TodoItem'](data).render();
+		}.bind(this));
+
+		this.todoListContainer.innerHTML = result;
 	}
 
 	TodoList.prototype.initialize = function () {
@@ -27,16 +46,7 @@
 		data.id = Date.now();
 
 		this.tasks.push(data);
-		console.log(this.tasks);
 		this.renderItems();
-	}
-
-	TodoList.prototype.renderItems = function () {
-		var result = '';
-
-		this.tasks.forEach(function(data){
-			//result += 
-		});
 	}
 
 	function serialize(form) {
