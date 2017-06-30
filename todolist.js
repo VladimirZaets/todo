@@ -1,12 +1,13 @@
 (function() {
 	var config = {
 		dependency: {
-			constructor: ['TodoItem']
+			constructor: ['TodoItem'],
+			instances: ['restapi']
 		},
 		todoForm: document.querySelector('#todo'),
 		todoListContainer: document.querySelector('#list'),
 		todiListItemDoneClass: 'menu-item-done',
-		todoListItemsClass: 'todo-list-item'
+		todoListItemsClass: 'todo-list-item',
 	}
 
 	function TodoList (config) {
@@ -25,6 +26,10 @@
 		deps.constructor.forEach(function(name){
 			this.deps[name] = registry.getConstructor(name);
 		}.bind(this));
+
+		deps.instances.forEach(function(dep){
+			this.dependency.instances[dep] = registry.get(dep);
+		}.bind(this));
 	}
 
 	TodoList.prototype.renderItems = function () {
@@ -39,6 +44,22 @@
 
 	TodoList.prototype.initialize = function () {
 		this.todoForm.addEventListener('submit', this.submitHandler.bind(this));
+		document.querySelector('#save').addEventListener('click', function(){
+			this.dependency.instances.restapi.send('POST', 'tasks', this.tasks, function(data){
+				if (data.target.readyState == 4) {
+					this.tasks = JSON.parse(data.target.response);
+					alert('Saved');
+				}
+			});
+		}.bind(this));
+
+		this.dependency.instances.restapi.send('GET', 'tasks', this.tasks, function(data){
+			if (data.target.readyState == 4) {
+				this.tasks = JSON.parse(data.target.response);
+				this.renderItems();
+				this.setListeners();
+			}
+		}.bind(this));
 	}
 
 	TodoList.prototype.submitHandler = function (event) {
