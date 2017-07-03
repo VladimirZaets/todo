@@ -31,5 +31,15 @@
 		data ? xhr.send(JSON.stringify(data)) : xhr.send();
 	}
 
+	RestAPI.prototype.POST = function(url, data, callback, event) {
+		this.send('POST', url, data, callback, event)
+	}
+	RestAPI.prototype.DELETE = function(url, id, callback, event) {
+		this.send('DELETE', url + '/' + id, null, callback, event)
+	}
+	RestAPI.prototype.GET = function(url, data, callback, event) {
+		this.send('GET', url, data, callback, event)
+	}
+
 	registry.set('restapi', new RestAPI(config));
 })()

@@ -8,6 +8,7 @@
 		todoListContainer: document.querySelector('#list'),
 		todiListItemDoneClass: 'menu-item-done',
 		todoListItemsClass: 'todo-list-item',
+		todoListItemRemove: 'todo-list-item-remove'
 	}
 
 	function TodoList (config) {
@@ -15,6 +16,7 @@
 		this.todoListContainer = config.todoListContainer;
 		this.todoListItemsClass = config.todoListItemsClass;
 		this.todiListItemDoneClass = config.todiListItemDoneClass;
+		this.todoListItemRemove = config.todoListItemRemove;
 		this.tasks = [];
 		this.dependency = config.dependency;
 		this.initDependency(config.dependency);
@@ -45,15 +47,21 @@
 	TodoList.prototype.initialize = function () {
 		this.todoForm.addEventListener('submit', this.submitHandler.bind(this));
 		document.querySelector('#save').addEventListener('click', function(){
-			this.dependency.instances.restapi.send('POST', 'tasks', this.tasks, function(data){
+			if (this.sending) {
+				return;
+			}
+
+			this.sending = true;
+			this.dependency.instances.restapi.POST('tasks', this.tasks, function(data){
 				if (data.target.readyState == 4) {
+					this.sending = false;
 					this.tasks = JSON.parse(data.target.response);
 					alert('Saved');
 				}
 			});
 		}.bind(this));
 
-		this.dependency.instances.restapi.send('GET', 'tasks', this.tasks, function(data){
+		this.dependency.instances.restapi.GET('tasks', this.tasks, function(data){
 			if (data.target.readyState == 4) {
 				this.tasks = JSON.parse(data.target.response);
 				this.renderItems();
@@ -78,11 +86,35 @@
 		this.renderItems();
 		this.cleanFields(this.todoForm);
 		this.setListeners();
-		console.log(this.tasks)
 	}
 
 	TodoList.prototype.setListeners = function () {
 		Array.prototype.slice.call(document.getElementsByClassName(this.todoListItemsClass)).forEach(function(elem){
+			elem.getElementsByClassName(this.todoListItemRemove)[0].addEventListener('click', function(event){
+				var itemData;
+
+				event.preventDefault();
+				event.stopPropagation();
+				console.log(this.tasks);
+				if (!window.confirm('You realy whant delete this task?')) {
+					return;
+				}
+
+				itemData = removeBeElement(elem, this.tasks);
+				elem.remove();
+
+				if (itemData._id) {
+					this.dependency.instances.restapi.DELETE('tasks', itemData._id, function(data) {
+						if (data.target.readyState == 4) {
+							alert('Deleted');
+						}
+						return;
+					})
+				} else {
+					alert('Deleted');
+				}
+			}.bind(this));
+
 			elem.getElementsByClassName(this.todiListItemDoneClass)[0].addEventListener('click', function(event){
 				var model = getItemData(elem, this.tasks);
 
@@ -138,6 +170,23 @@
 				return list[i];
 			}
 		}
+	}
+
+	function removeBeElement(elem, list) {
+			var id = Number(elem.getAttribute('data-message-id')),
+			i = 0,
+			length = list.length,
+			result;
+
+		for (i; i<length; i++) {
+			if (list[i].id === id) {
+				result = Object.assign({}, list[i]);
+				list.splice(i, 1);
+
+				return result;
+			}
+		}
+
 	}
 
 	function removeProgress(list) {

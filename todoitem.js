@@ -1,7 +1,8 @@
 (function () {
 	var defaults = {
 		itemClass: 'todo-list-item',
-		itemDoneClass: 'menu-item-done'
+		itemDoneClass: 'menu-item-done',
+		itemRemoveClass: 'todo-list-item-remove'		
 	}
 
 	function extend(obj1, obj2) {
@@ -21,6 +22,7 @@
 		this.inprogress = config.inprogress;
 		this.itemClass = config.itemClass;
 		this.itemDoneClass = config.itemDoneClass;
+		this.itemRemoveClass = config.itemRemoveClass;
 	}
 
 	TodoListItem.prototype.render = function (index) {
@@ -36,7 +38,7 @@
 			result += ' task-inprogress';
 		}
 
-		result += '"><div class="item-first">'+ index +': '+ this.message +'</div><div class="item-second"><span class="'+this.itemDoneClass+'"></span></div></li>';
+		result += '"><div class="item-first">'+ index +': '+ this.message +'</div><div class="item-second"><span class="'+this.itemDoneClass+'">D</span><span class="'+this.itemRemoveClass+'">R</span></div></li>';
 
 		return result;
 	}

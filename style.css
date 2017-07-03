@@ -25,10 +25,6 @@ border: 2px solid #1559ec;
 box-shadow: 0 0 10px #548bff;
 }
 
-#list li:hover .menu-item-done {
-background: #fff;
-}
-
 #todo button {
 display: inline-block;
 width: 110px;
@@ -49,27 +45,55 @@ padding: 0;
 }
 
 .item-first {
-width: 95%;
+width: 85%;
 vertical-align: middle;
     line-height: 10px;
 }
 
 .item-second {
-width: 5%;
+width: 15%;
 vertical-align: middle;
-    height: 20px;
+    height: 25px;
 }
 
 .todo-list-item div {
 display: inline-block;
 }
 
+.todo-list-item-remove,
 .menu-item-done {
-width: 20px;
-height: 20px;
+margin: 0 10px;
+text-align: center;
+padding-top: 2px;
+}
+
+.menu-item-done {
+width: 25px;
+height: 25px;
 border-radius: 50%;
-background: #bdbdbd;
+background: green;
+color: #fff;
 display: inline-block;
+border: 1px solid #fff;
+box-sizing: border-box;
+}
+
+.menu-item-done:hover,
+.todo-list-item-remove:hover {
+box-shadow: 0 0 10px #fff;
+}
+
+.todo-list-item-remove {
+width: 25px;
+height: 25px;
+border-radius: 50%;
+border: 1px solid grey;
+display: inline-block;
+box-sizing: border-box;
+background: red;
+color: #fff;
+border: 1px solid #fff;
+box-sizing: border-box;
 }
 
 #list li.todo-list-item.task-resolve,
@@ -91,11 +115,8 @@ box-shadow: 0 0 10px blue;
 #list li.todo-list-item.task-inprogress.task-resolve .menu-item-done{
 background: green;
 border: 1px solid #fff;
+color: #fff;
 box-sizing: border-box;
-}
-
-#list li.todo-list-item.task-inprogress .menu-item-done {
-background: #fff;
 }
 
 #list li.todo-list-item.task-resolve:hover {
